@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { query, mutation, action } from "./_generated/server";
 import { api } from "./_generated/api";
+import { ConvexError } from "convex/values";
 
 // Write your Convex functions in any file inside this directory (`convex`).
 // See https://docs.convex.dev/functions for more.
@@ -41,6 +42,16 @@ export const saveIdea = mutation({
     // Insert or modify documents in the database here.
     // Mutations can also read from the database like queries.
     // See https://docs.convex.dev/database/writing-data.
+
+    const existingIdea = await ctx.db
+      .query("ideas")
+      .filter((q) => q.eq(q.field("idea"), args.idea))
+      .first();
+
+    if (existingIdea) {
+      // If the idea already exists, return an error or a specific message
+      throw new ConvexError("Idea already exists");
+    }
 
     // Optionally, capture the ID of the newly created document
     const id = await ctx.db.insert("ideas", args);

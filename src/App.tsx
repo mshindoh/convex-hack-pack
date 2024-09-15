@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
+import { ConvexError } from "convex/values";
 
 function App() {
   const [newIdea, setNewIdea] = useState("");
@@ -41,8 +42,17 @@ function App() {
             }
             onClick={async (e) => {
               e.preventDefault();
-              await saveIdea({ idea: newIdea.trim(), random: false });
-              setNewIdea("");
+              try {
+                await saveIdea({ idea: newIdea.trim(), random: false });
+                setNewIdea("");
+              } catch (error) {
+                if (error instanceof ConvexError) {
+                  console.error("Failed to save idea: ", error.message);
+                  alert("Failed to save idea: " + error.message);
+                } else {
+                  console.error("An error occurred while saving the idea");
+                }
+              }
             }}
             className="min-w-fit"
           >
@@ -86,7 +96,7 @@ function App() {
           }}
           title="Delete an idea from the database"
         >
-          Delete an idea
+          Delete an idea from the top of the list
         </Button>
 
         <ul>
