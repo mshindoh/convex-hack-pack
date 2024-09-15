@@ -8,13 +8,23 @@ import { api } from "./_generated/api";
 // You can read data from the database via a query function:
 export const listIdeas = query({
   // Validators for arguments.
-  args: {},
+  args: {
+    includeRandom: v.boolean(),
+  },
 
   // Query function implementation.
   handler: async (ctx, args) => {
     // Read the database as many times as you need here.
     // See https://docs.convex.dev/database/reading-data.
-    return await ctx.db.query("ideas").collect();
+    // return await ctx.db.query("ideas").collect();
+    if (args.includeRandom) {
+      return await ctx.db.query("ideas").collect();
+    } else {
+      return await ctx.db
+        .query("ideas")
+        .filter((q) => q.neq(q.field("random"), true))
+        .collect();
+    }
   },
 });
 
