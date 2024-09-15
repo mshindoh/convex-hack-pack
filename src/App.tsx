@@ -10,7 +10,7 @@ function App() {
   const [newIdea, setNewIdea] = useState("");
   const [includeRandom, setIncludeRandom] = useState(true);
 
-  const ideas = useQuery(api.myFunctions.listIdeas);
+  const ideas = useQuery(api.myFunctions.listIdeas, { includeRandom });
   const saveIdea = useMutation(api.myFunctions.saveIdea);
   const generateIdea = useAction(api.myFunctions.fetchRandomIdea);
 
