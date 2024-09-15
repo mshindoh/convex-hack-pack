@@ -72,3 +72,18 @@ export const fetchRandomIdea = action({
     return idea;
   },
 });
+
+export const deleteIdea = mutation({
+  // Validators for arguments.
+  args: {
+    // id: v.id("ideas"),
+  },
+
+  // Mutation function implementation.
+  handler: async (ctx, args) => {
+    const elem = await ctx.db.query("ideas").first();
+    // console.log(elem["_id"]);
+    ctx.db.delete(elem["_id"]);
+    return;
+  },
+});

@@ -12,6 +12,7 @@ function App() {
 
   const ideas = useQuery(api.myFunctions.listIdeas, { includeRandom });
   const saveIdea = useMutation(api.myFunctions.saveIdea);
+  const deleteIdea = useMutation(api.myFunctions.deleteIdea);
   const generateIdea = useAction(api.myFunctions.fetchRandomIdea);
 
   return (
@@ -77,6 +78,16 @@ function App() {
             </Label>
           </div>
         </div>
+
+        <Button
+          onClick={async () => {
+            await deleteIdea();
+            console.log("Deleted an idea from the database");
+          }}
+          title="Delete an idea from the database"
+        >
+          Delete an idea
+        </Button>
 
         <ul>
           {ideas?.map((document, i) => (
